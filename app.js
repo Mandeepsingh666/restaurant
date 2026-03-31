@@ -37,7 +37,7 @@ function fetchSheetViaJsonp() {
     // gviz JSONP format: responseHandler in the tqx parameter
     const url =
       `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
-      `?tqx=out:json;responseHandler:${callbackName}`;
+      `?tqx=responseHandler:${callbackName}`;
 
     // The callback gviz will call
     window[callbackName] = function (data) {
