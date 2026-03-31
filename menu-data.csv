@@ -1,0 +1,25 @@
+category,item_name,local_name,description,price,available,image_url,notes
+Suriname Menu,Javaanse Bami Kip,,"Indonesian noodles with sweet soy chicken, spicy liver & gizzard, egg omelette, pickled cucumber and pepper",$15.00,TRUE,,
+Suriname Menu,Javaanse Bami Vegetarisch,,"Indonesian noodles (vegetarian) with mixed vegetables, pickled cucumber and pepper",$12.00,TRUE,,
+Suriname Menu,Javaanse Nasi Kip,,"Indonesian fried rice with stripped chicken, sweet soy chicken, fried plantain, spicy liver & gizzard, egg omelette, pickled cucumber and pepper",$17.00,TRUE,,
+Suriname Menu,Javaanse Nasi Vegetarisch,,"Indonesian fried rice (vegetarian) with mixed vegetables, fried plantain, pickled cucumber and pepper",$12.00,TRUE,,
+Suriname Menu,Saoto Soup,,"Suriname signature soup with rice, bean sprouts, boiled egg, stripped chicken, fried potatoes & vermicelli, hot soy sauce",$14.00,TRUE,,
+Suriname Menu,Teloh Met Bakkeliaw,,Fried cassava with salt fish,$15.00,TRUE,,
+Suriname Menu,Teloh Met Kip,,Fried cassava with sweet soy chicken,$12.00,TRUE,,
+Suriname Menu,Combo,,"Combo noodles & fried rice, sweet soy chicken, spicy liver & gizzard, egg omelette, pickled cucumber and pepper",$16.00,TRUE,,
+Suriname Menu,PNK Special,,"Combo noodles & fried rice with sweet soy chicken, spicy liver & gizzard, egg omelette, fried cassava with salt fish",$20.00,TRUE,,Popular
+Finger Foods,Kip Aardappel Kroketten,,Strip chicken & potatoes croquettes,$2.50 (1pc),TRUE,,
+Finger Foods,Kip Bitterballen,,Strip chicken with flour roll,$2.00 (1pc),TRUE,,
+Finger Foods,Loempia (Kip),,Chicken & vegetable roll,$3.50 or 3/$10,TRUE,,
+Finger Foods,Sate,,Chicken kebab with hot sauce,$4.00 (1pc),TRUE,,Spicy
+Finger Foods,Kippen Worst,,Chicken sausage with spicy sauce,3/$10.00,TRUE,,Spicy
+Finger Foods,Baka Babana Met Pindasambel,,Fried ripe plantain with peanut sauce,3/$5.00,TRUE,,
+Dessert,Lapis,,Surinamese jello,$3.00 (1pc),TRUE,,
+Dessert,Flensje,,Crepe filled with shredded coconut,$2.50 (1pc),TRUE,,
+Dessert,Bojo,,Cassava cake with pineapple,$4.00 (1pc),TRUE,,
+Drinks,Dawet,,,$6.00,TRUE,,
+Weekend Special,Chinese Kip Tjawmin,,"Chinese fine noodles with roasted chicken, bokchoy, pickled cucumber & pepper",$18.00,TRUE,,
+Weekend Special,Chinese Kip Tjawmin Met Garnalen,,"Chinese fine noodles, roasted chicken & shrimp, bokchoy, pickled cucumber & pepper",$24.00,TRUE,,
+Weekend Special,"Hong Kong Nasi Kip & Garnalen",,"Chinese fried rice, charsiu chicken & shrimp, bokchoy, pickled cucumber & pepper",$22.00,TRUE,,
+Weekend Special,Moksi Alesi,,"Cookup rice with red chicken, fried fish pieces, fried plantain, pickled cucumber & pepper",$20.00,TRUE,,
+Weekend Special,Pom Met Bruine Bonen En Kip,,"Rice, pom, red beans and chicken, pickled cucumber & pepper",$18.00,TRUE,,
