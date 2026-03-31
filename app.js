@@ -1,19 +1,10 @@
 /* ═══════════════════════════════════════════════════════════
    PNK Surinamese Cuisine & Majnoon Café
-   app.js — Menu fetching from Google Sheets + UI behaviour
+   app.js — Menu loaded from menu.json + UI behaviour
    ═══════════════════════════════════════════════════════════ */
 
-// ─────────────────────────────────────────────────────────────
-// CONFIGURATION
-// Replace YOUR_SHEET_ID_HERE with the ID from your Google Sheet URL.
-// The ID is the long string between /spreadsheets/d/ and /edit
-// Example URL: https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms/edit
-//                                                     ↑ this part ↑
-// ─────────────────────────────────────────────────────────────
-const SHEET_ID = '1l4rIOjtInNmybOV8VdyWovTTgUP2s7XW0XUb--afCfo';
-
 // Menu sections — displayed in this order
-// The `key` must exactly match the value in column A of your sheet
+// The `key` must match the "category" value in menu.json
 const SECTIONS = [
   { key: 'Suriname Menu',   label: 'Suriname Menu',          emoji: '🍜', color: '#377E3F' },
   { key: 'Finger Foods',    label: 'Gebakjes (Finger Foods)', emoji: '🥟', color: '#B40A2D' },
@@ -21,52 +12,6 @@ const SECTIONS = [
   { key: 'Drinks',          label: 'Drank (Drinks)',          emoji: '🥤', color: '#1a6b8a' },
   { key: 'Weekend Special', label: 'Weekend Special',         emoji: '⭐', color: '#6b2d8a' },
 ];
-
-// ─────────────────────────────────────────────────────────────
-// JSONP FETCH (avoids CORS — works from any host including GitHub Pages)
-// ─────────────────────────────────────────────────────────────
-
-/**
- * Loads the Google Sheet via a JSONP <script> tag.
- * The gviz API calls window[callbackName](data) with the parsed table.
- */
-function fetchSheetViaJsonp() {
-  return new Promise((resolve, reject) => {
-    const callbackName = '__pnkMenuCb' + Date.now();
-
-    // gviz JSONP format: responseHandler in the tqx parameter
-    const url =
-      `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
-      `?tqx=responseHandler:${callbackName}`;
-
-    // The callback gviz will call
-    window[callbackName] = function (data) {
-      cleanup();
-      resolve(data);
-    };
-
-    const script = document.createElement('script');
-    script.src = url;
-    script.onerror = () => {
-      cleanup();
-      reject(new Error('Script load failed — check Sheet ID and public access'));
-    };
-
-    // 12-second timeout guard
-    const timeoutId = setTimeout(() => {
-      cleanup();
-      reject(new Error('Request timed out after 12 seconds'));
-    }, 12000);
-
-    function cleanup() {
-      delete window[callbackName];
-      clearTimeout(timeoutId);
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    document.head.appendChild(script);
-  });
-}
 
 // ─────────────────────────────────────────────────────────────
 // FETCH & RENDER MENU
@@ -77,34 +22,19 @@ async function fetchMenu() {
   const errorEl     = document.getElementById('menu-error');
 
   try {
-    // data is already a parsed JS object — no JSON.parse needed with JSONP
-    const data = await fetchSheetViaJsonp();
-    const rows = (data && data.table && data.table.rows) || [];
+    const res = await fetch('menu.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const allItems = await res.json();
 
-    if (rows.length === 0) throw new Error('Sheet appears to be empty');
-
-    // Map each row → item object using column indices A–H
-    const allItems = rows
-      .map(row => ({
-        category:    getCellValue(row, 0),  // A
-        item_name:   getCellValue(row, 1),  // B
-        local_name:  getCellValue(row, 2),  // C
-        description: getCellValue(row, 3),  // D
-        price:       getCellValue(row, 4),  // E
-        available:   getCellValue(row, 5),  // F
-        image_url:   getCellValue(row, 6),  // G
-        notes:       getCellValue(row, 7),  // H
-      }))
-      .filter(item => {
-        if (!item.category || !item.item_name) return false;
-        const av = String(item.available).trim().toUpperCase();
-        return av !== 'FALSE';
-      });
+    if (!Array.isArray(allItems) || allItems.length === 0) {
+      throw new Error('menu.json is empty or invalid');
+    }
 
     // Group by category
     const grouped = new Map();
     allItems.forEach(item => {
-      const cat = item.category.trim();
+      const cat = (item.category || '').trim();
+      if (!cat || !item.item_name) return;
       if (!grouped.has(cat)) grouped.set(cat, []);
       grouped.get(cat).push(item);
     });
@@ -116,7 +46,7 @@ async function fetchMenu() {
       if (items.length > 0) html += renderSection(section, items);
     });
 
-    if (!html) throw new Error('No visible menu items found');
+    if (!html) throw new Error('No menu items found');
 
     containerEl.innerHTML = html;
     loadingEl.style.display   = 'none';
@@ -127,13 +57,6 @@ async function fetchMenu() {
     loadingEl.style.display = 'none';
     errorEl.style.display   = 'block';
   }
-}
-
-/** Safely read a cell value, returning '' for null/undefined */
-function getCellValue(row, colIndex) {
-  const cell = row.c && row.c[colIndex];
-  if (!cell || cell.v === null || cell.v === undefined) return '';
-  return cell.v;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -158,6 +81,7 @@ function renderItem(item, accentColor) {
   const firstLetter  = String(item.item_name).charAt(0).toUpperCase();
   const escapedColor = escapeAttr(accentColor);
 
+  // Image or styled letter placeholder
   const imageHTML = item.image_url
     ? `<img
          src="${escapeAttr(item.image_url)}"
@@ -167,10 +91,17 @@ function renderItem(item, accentColor) {
        >`
     : `<div class="img-placeholder" style="background:${escapedColor}">${firstLetter}</div>`;
 
+  // English translation shown in italics under the Dutch name
+  const englishHTML = item.english_name
+    ? `<p class="item-english">(${escapeHtml(item.english_name)})</p>`
+    : '';
+
+  // Description
   const descHTML = item.description
     ? `<p class="item-description">${escapeHtml(item.description)}</p>`
     : '';
 
+  // Notes badge
   const notesHTML = item.notes
     ? `<span class="badge ${getNoteBadgeClass(item.notes)}">${escapeHtml(item.notes)}</span>`
     : '';
@@ -183,6 +114,7 @@ function renderItem(item, accentColor) {
           <span class="item-name">${escapeHtml(item.item_name)}</span>
           <span class="item-price">${escapeHtml(item.price)}</span>
         </div>
+        ${englishHTML}
         ${descHTML}
         <div class="item-badges">
           ${notesHTML}
@@ -266,19 +198,5 @@ function initNav() {
 // ─────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
-
-  if (SHEET_ID === 'YOUR_SHEET_ID_HERE') {
-    const loadingEl = document.getElementById('menu-loading');
-    const errorEl   = document.getElementById('menu-error');
-    loadingEl.style.display = 'none';
-    errorEl.style.display   = 'block';
-    errorEl.innerHTML = `
-      <div class="error-icon">📋</div>
-      <h3>Menu Setup Required</h3>
-      <p>Open <code>app.js</code> and replace <code>YOUR_SHEET_ID_HERE</code> with your Google Sheet ID.</p>
-      <p>See <a href="README.md">README.md</a> for instructions.</p>`;
-    return;
-  }
-
   fetchMenu();
 });

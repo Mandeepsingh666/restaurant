@@ -595,6 +595,12 @@ ul { list-style: none; }
   white-space: nowrap;
   flex-shrink: 0;
 }
+.item-english {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: -4px;
+}
 .item-description {
   font-size: 0.83rem;
   color: var(--text-muted);

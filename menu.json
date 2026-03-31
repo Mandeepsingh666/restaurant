@@ -1,0 +1,218 @@
+[
+  {
+    "category": "Suriname Menu",
+    "item_name": "Javaanse Bami Kip",
+    "english_name": "Indonesian Noodles w/ Chicken",
+    "description": "Indonesian noodles with sweet soy chicken, spicy liver & gizzard, egg omelette, pickled cucumber, and pepper",
+    "price": "$15.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Suriname Menu",
+    "item_name": "Javaanse Bami Vegetarisch",
+    "english_name": "Indonesian Noodles Vegetarian",
+    "description": "Indonesian noodles (vegetarian) with mixed vegetables, pickled cucumber and pepper",
+    "price": "$12.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Suriname Menu",
+    "item_name": "Javaanse Nasi Kip",
+    "english_name": "Indonesian Fried Rice w/ Chicken",
+    "description": "Indonesian fried rice with stripped chicken, sweet soy chicken, fried plantain, spicy liver & gizzard, egg omelette, pickled cucumber and pepper",
+    "price": "$17.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Suriname Menu",
+    "item_name": "Javaanse Nasi Vegetarisch",
+    "english_name": "Indonesian Fried Rice Vegetarian",
+    "description": "Indonesian fried rice (vegetarian) mixed vegetables, fried plantain, pickled cucumber and pepper",
+    "price": "$12.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Suriname Menu",
+    "item_name": "Saoto Soup",
+    "english_name": "Surinamese Signature Soup",
+    "description": "Suriname signature soup with rice, bean sprouts, boiled egg, stripped chicken, fried potatoes & vermicelli, hot soy sauce",
+    "price": "$14.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Suriname Menu",
+    "item_name": "Teloh met Bakkeliaw",
+    "english_name": "Fried Cassava w/ Salt Fish",
+    "description": "Fried cassava with salt fish",
+    "price": "$15.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Suriname Menu",
+    "item_name": "Teloh met Kip",
+    "english_name": "Fried Cassava w/ Sweet Soy Chicken",
+    "description": "Fried cassava with sweet soy chicken",
+    "price": "$12.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Suriname Menu",
+    "item_name": "Combo",
+    "english_name": "Combo Noodles & Fried Rice",
+    "description": "Combo noodles & fried rice with sweet soy chicken, spicy liver & gizzard, egg omelette, pickled cucumber and pepper",
+    "price": "$16.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Suriname Menu",
+    "item_name": "PNK Special",
+    "english_name": "Chef's Special Combination",
+    "description": "Combo bami, nasi & telo bakkeljauw with sweet soy chicken, spicy liver & gizzard, egg omelette, fried cassava with salt fish",
+    "price": "$20.00",
+    "notes": "Popular",
+    "image_url": ""
+  },
+  {
+    "category": "Finger Foods",
+    "item_name": "Kip Aardappel Kroketten",
+    "english_name": "Chicken & Potato Croquettes",
+    "description": "Strip chicken & potatoes croquettes",
+    "price": "$2.50 (1pc)",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Finger Foods",
+    "item_name": "Kip Bitterballen",
+    "english_name": "Chicken Flour Roll",
+    "description": "Strip chicken with flour roll",
+    "price": "$2.00 (1pc)",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Finger Foods",
+    "item_name": "Loempia (Kip)",
+    "english_name": "Chicken & Vegetable Roll",
+    "description": "Chicken & vegetable roll",
+    "price": "$3.50 or 3/$10",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Finger Foods",
+    "item_name": "Sate",
+    "english_name": "Chicken Kebab w/ Hot Sauce",
+    "description": "Chicken kebab with hot sauce",
+    "price": "$4.00 (1pc)",
+    "notes": "Spicy",
+    "image_url": ""
+  },
+  {
+    "category": "Finger Foods",
+    "item_name": "Kippen Worst",
+    "english_name": "Chicken Sausage w/ Spicy Sauce",
+    "description": "Chicken sausage with spicy sauce",
+    "price": "3/$10.00",
+    "notes": "Spicy",
+    "image_url": ""
+  },
+  {
+    "category": "Finger Foods",
+    "item_name": "Baka Babana met Pindasambel",
+    "english_name": "Fried Plantain w/ Peanut Sauce",
+    "description": "Fried ripe plantain with peanut sauce",
+    "price": "3/$5.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Dessert",
+    "item_name": "Lapis",
+    "english_name": "Surinamese Jello",
+    "description": "Surinamese jello",
+    "price": "$3.00 (1pc)",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Dessert",
+    "item_name": "Flensje",
+    "english_name": "Coconut Crepe",
+    "description": "Crepe filled with shredded coconut",
+    "price": "$2.50 (1pc)",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Dessert",
+    "item_name": "Bojo",
+    "english_name": "Cassava Cake w/ Pineapple",
+    "description": "Cassava cake with pineapple",
+    "price": "$4.00 (1pc)",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Drinks",
+    "item_name": "Dawet",
+    "english_name": "Traditional Surinamese Sweet Drink",
+    "description": "Traditional Surinamese sweet coconut drink",
+    "price": "$6.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Weekend Special",
+    "item_name": "Chinese Kip Tjawmin",
+    "english_name": "Chinese Noodles w/ Roasted Chicken",
+    "description": "Fine noodles with Chinese roasted chicken, bokchoy, pickled cucumber & pepper",
+    "price": "$18.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Weekend Special",
+    "item_name": "Chinese Kip Tjawmin met Garnalen",
+    "english_name": "Chinese Noodles w/ Chicken & Shrimp",
+    "description": "Chinese fine noodles, roasted chicken & shrimp, bokchoy, pickled cucumber & pepper",
+    "price": "$24.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Weekend Special",
+    "item_name": "Hong Kong Nasi Kip & Garnalen",
+    "english_name": "Hong Kong Fried Rice w/ Chicken & Shrimp",
+    "description": "Chinese fried rice, charsiu chicken & shrimp, bokchoy, pickled cucumber & pepper",
+    "price": "$24.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Weekend Special",
+    "item_name": "Moksi Alesi",
+    "english_name": "Cookup Rice w/ Red Chicken & Fried Fish",
+    "description": "Cookup rice with red chicken, fried fish pieces, fried plantain, pickled cucumber & pepper",
+    "price": "$20.00",
+    "notes": "",
+    "image_url": ""
+  },
+  {
+    "category": "Weekend Special",
+    "item_name": "Pom met Bruine Bonen en Kip",
+    "english_name": "Rice, Pom, Red Beans & Chicken",
+    "description": "Rice, pom, red beans and chicken, pickled cucumber & pepper",
+    "price": "$18.00",
+    "notes": "",
+    "image_url": ""
+  }
+]
