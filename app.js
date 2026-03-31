@@ -10,7 +10,7 @@
 // Example URL: https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms/edit
 //                                                     ↑ this part ↑
 // ─────────────────────────────────────────────────────────────
-const SHEET_ID = 'YOUR_SHEET_ID_HERE';
+const SHEET_ID = '1l4rIOjtInNmybOV8VdyWovTTgUP2s7XW0XUb--afCfo';
 
 const SHEET_URL =
   `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
