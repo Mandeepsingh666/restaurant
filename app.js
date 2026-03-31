@@ -12,9 +12,6 @@
 // ─────────────────────────────────────────────────────────────
 const SHEET_ID = '1l4rIOjtInNmybOV8VdyWovTTgUP2s7XW0XUb--afCfo';
 
-const SHEET_URL =
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-
 // Menu sections — displayed in this order
 // The `key` must exactly match the value in column A of your sheet
 const SECTIONS = [
@@ -26,32 +23,67 @@ const SECTIONS = [
 ];
 
 // ─────────────────────────────────────────────────────────────
-// FETCH & PARSE
+// JSONP FETCH (avoids CORS — works from any host including GitHub Pages)
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Loads the Google Sheet via a JSONP <script> tag.
+ * The gviz API calls window[callbackName](data) with the parsed table.
+ */
+function fetchSheetViaJsonp() {
+  return new Promise((resolve, reject) => {
+    const callbackName = '__pnkMenuCb' + Date.now();
+
+    // gviz JSONP format: responseHandler in the tqx parameter
+    const url =
+      `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
+      `?tqx=out:json;responseHandler:${callbackName}`;
+
+    // The callback gviz will call
+    window[callbackName] = function (data) {
+      cleanup();
+      resolve(data);
+    };
+
+    const script = document.createElement('script');
+    script.src = url;
+    script.onerror = () => {
+      cleanup();
+      reject(new Error('Script load failed — check Sheet ID and public access'));
+    };
+
+    // 12-second timeout guard
+    const timeoutId = setTimeout(() => {
+      cleanup();
+      reject(new Error('Request timed out after 12 seconds'));
+    }, 12000);
+
+    function cleanup() {
+      delete window[callbackName];
+      clearTimeout(timeoutId);
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    document.head.appendChild(script);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────
+// FETCH & RENDER MENU
 // ─────────────────────────────────────────────────────────────
 async function fetchMenu() {
-  const loadingEl  = document.getElementById('menu-loading');
+  const loadingEl   = document.getElementById('menu-loading');
   const containerEl = document.getElementById('menu-container');
-  const errorEl    = document.getElementById('menu-error');
+  const errorEl     = document.getElementById('menu-error');
 
   try {
-    const res = await fetch(SHEET_URL);
-    if (!res.ok) throw new Error(`Network error: HTTP ${res.status}`);
-
-    const text = await res.text();
-
-    // The gviz API wraps the response in a JSONP callback:
-    //   /*O_o*/\ngoogle.visualization.Query.setResponse({...});
-    // Strip the wrapper to get plain JSON.
-    const jsonStr = text
-      .replace(/^[^(]*\(/, '')   // remove everything up to first (
-      .replace(/\);?\s*$/, '');   // remove trailing );
-
-    const data = JSON.parse(jsonStr);
+    // data is already a parsed JS object — no JSON.parse needed with JSONP
+    const data = await fetchSheetViaJsonp();
     const rows = (data && data.table && data.table.rows) || [];
 
     if (rows.length === 0) throw new Error('Sheet appears to be empty');
 
-    // Map each row → item object using column indices A-H
+    // Map each row → item object using column indices A–H
     const allItems = rows
       .map(row => ({
         category:    getCellValue(row, 0),  // A
@@ -64,14 +96,12 @@ async function fetchMenu() {
         notes:       getCellValue(row, 7),  // H
       }))
       .filter(item => {
-        // Skip rows without a name or category
         if (!item.category || !item.item_name) return false;
-        // Hide if available column is explicitly FALSE
         const av = String(item.available).trim().toUpperCase();
         return av !== 'FALSE';
       });
 
-    // Group items by category
+    // Group by category
     const grouped = new Map();
     allItems.forEach(item => {
       const cat = item.category.trim();
@@ -79,19 +109,17 @@ async function fetchMenu() {
       grouped.get(cat).push(item);
     });
 
-    // Render sections in the defined order
+    // Render in defined section order
     let html = '';
     SECTIONS.forEach(section => {
       const items = grouped.get(section.key) || [];
-      if (items.length > 0) {
-        html += renderSection(section, items);
-      }
+      if (items.length > 0) html += renderSection(section, items);
     });
 
     if (!html) throw new Error('No visible menu items found');
 
     containerEl.innerHTML = html;
-    loadingEl.style.display  = 'none';
+    loadingEl.style.display   = 'none';
     containerEl.style.display = 'block';
 
   } catch (err) {
@@ -112,7 +140,6 @@ function getCellValue(row, colIndex) {
 // RENDERING
 // ─────────────────────────────────────────────────────────────
 
-/** Render one section block (heading + grid of cards) */
 function renderSection(section, items) {
   const sectionId = section.key.toLowerCase().replace(/\s+/g, '-');
   return `
@@ -127,12 +154,10 @@ function renderSection(section, items) {
     </div>`;
 }
 
-/** Render one menu card */
 function renderItem(item, accentColor) {
-  const firstLetter = String(item.item_name).charAt(0).toUpperCase();
+  const firstLetter  = String(item.item_name).charAt(0).toUpperCase();
   const escapedColor = escapeAttr(accentColor);
 
-  // Image or styled placeholder
   const imageHTML = item.image_url
     ? `<img
          src="${escapeAttr(item.image_url)}"
@@ -142,12 +167,10 @@ function renderItem(item, accentColor) {
        >`
     : `<div class="img-placeholder" style="background:${escapedColor}">${firstLetter}</div>`;
 
-  // Description (italicised)
   const descHTML = item.description
     ? `<p class="item-description">${escapeHtml(item.description)}</p>`
     : '';
 
-  // Notes badge
   const notesHTML = item.notes
     ? `<span class="badge ${getNoteBadgeClass(item.notes)}">${escapeHtml(item.notes)}</span>`
     : '';
@@ -169,7 +192,6 @@ function renderItem(item, accentColor) {
     </div>`;
 }
 
-/** Map a notes value to a CSS badge class */
 function getNoteBadgeClass(notes) {
   const n = notes.toLowerCase();
   if (n.includes('popular')) return 'badge-popular';
@@ -178,18 +200,16 @@ function getNoteBadgeClass(notes) {
   return 'badge-note';
 }
 
-/** Escape text for safe insertion as HTML content */
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
   return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;')
+    .replace(/'/g,  '&#039;');
 }
 
-/** Escape text for safe use inside an HTML attribute value */
 function escapeAttr(str) {
   if (str === null || str === undefined) return '';
   return String(str)
@@ -206,15 +226,12 @@ function initNav() {
   const mainNav   = document.getElementById('main-nav');
   const navLinks  = document.querySelectorAll('.nav-link');
 
-  // Mobile toggle
   if (navToggle && mainNav) {
     navToggle.addEventListener('click', () => {
       const isOpen = mainNav.classList.toggle('open');
       navToggle.classList.toggle('open', isOpen);
       navToggle.setAttribute('aria-expanded', isOpen);
     });
-
-    // Close nav when a link is clicked
     navLinks.forEach(link => {
       link.addEventListener('click', () => {
         mainNav.classList.remove('open');
@@ -224,7 +241,7 @@ function initNav() {
     });
   }
 
-  // Active section highlighting via IntersectionObserver
+  // Active section highlighting
   const sections = document.querySelectorAll('section[id]');
   if ('IntersectionObserver' in window && sections.length > 0) {
     const observer = new IntersectionObserver(
@@ -233,10 +250,7 @@ function initNav() {
           if (entry.isIntersecting) {
             const id = entry.target.getAttribute('id');
             navLinks.forEach(link => {
-              link.classList.toggle(
-                'active',
-                link.getAttribute('href') === `#${id}`
-              );
+              link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
             });
           }
         });
@@ -254,7 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
 
   if (SHEET_ID === 'YOUR_SHEET_ID_HERE') {
-    // Sheet not yet configured — show friendly setup message
     const loadingEl = document.getElementById('menu-loading');
     const errorEl   = document.getElementById('menu-error');
     loadingEl.style.display = 'none';
@@ -262,11 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
     errorEl.innerHTML = `
       <div class="error-icon">📋</div>
       <h3>Menu Setup Required</h3>
-      <p>
-        Open <code>app.js</code> and replace <code>YOUR_SHEET_ID_HERE</code>
-        with your Google Sheet ID.
-      </p>
-      <p>See <a href="README.md">README.md</a> for step-by-step instructions.</p>`;
+      <p>Open <code>app.js</code> and replace <code>YOUR_SHEET_ID_HERE</code> with your Google Sheet ID.</p>
+      <p>See <a href="README.md">README.md</a> for instructions.</p>`;
     return;
   }
 
